@@ -104,16 +104,18 @@ These instructions will get you a copy of the project up and running on your loc
 ## Run
 
 1. `settings.py`裏面需要新增curso這個app：
-  * ```
+  * add this:
+  ```
     INSTALLED_APPS=[
         ...
         ...
         ...
         'curso',
     ]
-    ```
+  ```
+
 2. `urls.py`需要新增下列代碼  把所有search開頭的request都導向到curso這個app：
-  *
+  * add this:
   ```
   import curso.urls
   urlpatterns += [
@@ -139,12 +141,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Built With
 
-- 'djangoApiDec==1.2',
-- 'jieba==0.38',
-- 'pymongo==3.4.0',
-- 'PyPrind==2.9.9',
-- 'requests==2.12.3',
-- 'simplejson==3.10.0',
+- djangoApiDec==1.2,
+- jieba==0.38,
+- pymongo==3.4.0,
+- PyPrind==2.9.9,
+- requests==2.12.3,
+- simplejson==3.10.0,
 
 ## Contributors
 

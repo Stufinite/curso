@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
-from search import views
+from curso import views
 urlpatterns = [
 	url(r'^$', views.search, name='search'),
 	url(r'^InvertedIndex/$', views.InvertedIndex, name='InvertedIndex'),

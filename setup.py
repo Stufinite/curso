@@ -13,7 +13,7 @@ setup(
     classifiers = [],
     license='MIT',
     install_requires=[
-        'djangoApiDec==1.2',
+        'djangoApiDec==v1.2',
         'jieba==0.38',
         'pymongo==3.4.0',
         'PyPrind==2.9.9',

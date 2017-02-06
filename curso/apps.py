@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.apps import AppConfig
-import re, urllib, requests, json, jieba, pyprind
+import urllib, requests, json
 from timetable.models import Course
 
 class SearchConfig(AppConfig):
@@ -91,40 +91,3 @@ class SearchOb(object):
 				if value['CourseCode'] in CourseCode:
 					newWeight = value['weight'] + 1
 					self.SrchCollect.update({key: {"$exists": True}}, {"$set":{key+"."+self.school+'.'+str(index)+'.weight':newWeight}})
-
-	####################Build index#########################################
-	def BuildIndex(self):
-		import pymongo
-
-		self.SrchCollect.remove({})
-		def bigram(title):
-			bigram = (title.split(',')[0], title.split(',')[1].replace('.', ''))
-			title = re.sub(r'\(.*\)', '', title.split(',')[0]).split()[0].strip()
-			bigram += (title, )
-			if len(title) > 2:
-				prefix = title[0]
-				for i in range(1, len(title)):
-					if title[i:].count(title[i]) == 1:
-						bigram += (prefix + title[i],)
-			return bigram
-
-		tmp = dict()
-		for i in pyprind.prog_percent(Course.objects.all()):
-			key = bigram(i.title)
-			titleTerms = self.title2terms(i.title)
-			CourseCode = i.code
-
-			for k in key:
-				tmp.setdefault(k, set()).add(CourseCode)
-			for t in titleTerms:
-				tmp.setdefault(t, set()).add(CourseCode)
-			tmp.setdefault(i.professor, set()).add(CourseCode)
-			tmp.setdefault(CourseCode, set()).add(CourseCode)
-
-		result = tuple( {'key':key, self.school:list(value)} for key, value in tmp.items() if key != '' and key!=None)
-		self.SrchCollect.insert(result)
-		self.SrchCollect.create_index([("key", pymongo.HASHED)])
-
-	def title2terms(self, title):
-		terms = jieba.cut(title)
-		return tuple(i for i in terms if len(i)>=2)

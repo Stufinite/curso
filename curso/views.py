@@ -11,11 +11,6 @@ def search(request):
 				
 	return JsonResponse(sob.getResult(), safe=False)
 
-def InvertedIndex(request):
-	sob = SearchOb(school='NCHU')
-	sob.BuildIndex()
-	return JsonResponse({"build Inverted index success":1}, safe=False)
-
 @queryString_required(['keyword', 'code', 'school'])
 def incWeight(request):
 	keyword = request.GET['keyword']

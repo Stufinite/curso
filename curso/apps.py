@@ -13,6 +13,7 @@ class SearchOb(object):
 		self.client = MongoClient(uri)
 		self.db = self.client['timetable']
 		self.SrchCollect = self.db['CourseSearch']
+		self.TitleAbbre = self.db['TitleAbbre']
 
 		self.keyword = keyword.split()
 		self.school = school
@@ -32,10 +33,10 @@ class SearchOb(object):
 	def KEMSearch(self, kw):
 		from functools import reduce 
 
-		cursor = self.SrchCollect.find({'key':kw}, {self.school:1, '_id':False}).limit(1)
+		cursor = self.SrchCollect.find({'key':kw}, {'value':1, '_id':False}).limit(1)
 		if cursor.count() > 0:
 			# Key Exist
-			return list(cursor)[0][self.school]
+			return list(cursor)[0]['value']
 		else:
 			try:
 				kcm = json.loads(requests.get('http://api.udic.cs.nchu.edu.tw/api/kcm/?keyword={}&lang=cht&num=200'.format(urllib.parse.quote(kw))).text)
@@ -72,22 +73,5 @@ class SearchOb(object):
 			intersection = intersection.intersection(cursor2)
 		return list(intersection)
 
-	def incWeight(self, code):
-		from django.shortcuts import get_list_or_404
-		''' To increment the weight of Search Result return by Search Engine. The higher weight will be return a the first of array.
-			args: code
-			return: None
-			process: CourseCode will be list, cause Course having same code will be opened in many department, which will also be an entity in database. So those CourseCode need to increment their weight (they are all in the same document with same key)
-		'''
-		CourseCode = get_list_or_404(Course, code=code)
-		CourseCode = tuple( i.id for i in CourseCode )
-		for key in self.keyword:		
-			cursor = self.SrchCollect.find({key: {"$exists": True}}).limit(1)
-			document = list(cursor)[0]
-			if cursor.count()==0:
-				break
-				
-			for index, value in enumerate(document[key][self.school]):
-				if value['CourseCode'] in CourseCode:
-					newWeight = value['weight'] + 1
-					self.SrchCollect.update({key: {"$exists": True}}, {"$set":{key+"."+self.school+'.'+str(index)+'.weight':newWeight}})
+	def incWeight(self, fullTitle):
+		self.TitleAbbre.update({'key':self.keyword[0]}, {'$inc':{'value.{}'.format(fullTitle):1}}, upsert=True)

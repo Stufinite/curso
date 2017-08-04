@@ -11,11 +11,10 @@ def search(request):
 				
 	return JsonResponse(sob.getResult(), safe=False)
 
-@queryString_required(['keyword', 'code', 'school'])
+@queryString_required(['keyword', 'fullTitle'])
 def incWeight(request):
 	keyword = request.GET['keyword']
-	code = request.GET['code']
-	school = request.GET['school']
-	sob = SearchOb(keyword, school)
-	sob.incWeight(code)
+	fullTitle = request.GET['fullTitle']
+	sob = SearchOb(keyword)
+	sob.incWeight(fullTitle)
 	return JsonResponse({"receive Weight success":1}, safe=False)

@@ -17,8 +17,9 @@ api domain：*`http://www.campass.com.tw/`*
 ### parameter
 
 * `keyword`：the word you want to query.
-* `school`：Cours of school you want to search. Below are schools which is available.
-  * `NCHU`：中興大學
+* `school`：Course of school you want to search. Below are schools which is available.
+  * [已經完成的學校清單](https://docs.google.com/spreadsheets/d/1shRsbpbYUQtol0Q1Gbgdd3xn4dQy0MHkqDfLIUlKPIQ/edit#gid=270187308)
+
 
 ### API usage and Results
 
@@ -26,72 +27,40 @@ API使用方式（下面所寫的是api的URL pattern）<br>
 Usage of API (pattern written below is URL pattern)：
 
 1. 簡稱、課程名稱、老師、課號搜尋：  
-取得課程在資料庫的該課程在該校的課程代碼
+取得該校課程的課程代碼
 
   - 範例 (Example)：
-    - `http://www.campass.com.tw/search/?keyword=狼人&school=NCHU`：
+    - `http://127.0.0.1:8000/curso/get/search/?keyword=台灣&school=NUTC`：
 
         ```
-        ["6686", "6694", "6673"]
+        ["D19080", "D16468"]
         ```
-    - `http://www.campass.com.tw/search/?keyword=西方+電影&school=NCHU`
-
-      ```
-      ["0302"]
-      ```
 
 2. 複數關鍵字查詢：
 
-  - 範例 (Example)：`http://www.campass.com.tw/search/?keyword=電影+西方&school=NCHU`
+  - 範例 (Example)：`http://127.0.0.1:8000/curso/get/search/?keyword=文化+臺灣&school=NUTC`
 
     ```
-    ["0302"]
+    ["D16432"]
     ```
 
-3. 累積關鍵字權重：需要給使用者查詢了哪個`關鍵字`、`課程代碼`、`學校`。例如`普物`這個key在mongodb裏面有非常多堂課程，透過指定`課程代碼`累積權重，下次使用者查詢時，權重高的課程會優先出現。
+3. 紀錄課程名稱縮寫字：提供 `課程縮寫字`、`課程課程`。  
+透過紀錄使用者查詢的行為，紀錄課程縮寫字的語料
 
-  - 範例 (Example)：`http://www.campass.com.tw/incWeight/?keyword=普物&code=1108&school=NCHU`
+  - 範例 (Example)：`http://127.0.0.1:8000/curso/post/incWeight/?keyword=發心&fullTitle=發展心理學`
   - result：
 
     ```
-    {
-    "_id": "58562b5caaa5b630c0c70e76",
-    "普物": {
-    "NCHU": [
-    {
-      "DBid": 2349,
-      "weight": 55575
-    },
-    {
-      "DBid": 2433,
-      "weight": 700
-    },
-    {
-      "DBid": 2434,
-      "weight": 300
-    }
-    ]
-    },
-    "NCHUCourseID": [
-    "1108",
-    "2277"
-    ]
-    }
+    {"receive Weight success": 1}
     ```
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+  - mongo的結果：
+    ```
+    { "_id" : ObjectId("5985b407f8208ec456aee30e"), "key" : "發心", "value" : { "發展心理學" : 5, "發育心理學" : 3 } }
+    ```
 
 ## Prerequisities
 
-1. OS：Ubuntu / OSX would be nice
-2. environment：need `python3`
-
-  - Linux：`sudo apt-get update; sudo apt-get install; python3 python3-dev`
-  - OSX：`brew install python3`
-
-3. service：need `mongodb`：
+1. service：need `mongodb`：
 
   - Linux：`sudo apt-get install mongodb`
 
@@ -128,16 +97,6 @@ These instructions will get you a copy of the project up and running on your loc
 ### Break down into end to end tests
 
 目前還沒寫測試...
-
-### And coding style tests
-
-目前沒有coding style tests...
-
-## Deployment
-
-`curso` is a django-app, so depends on django project.
-
-`課搜` 是一般的django插件，所以必須依存於django專案
 
 ## Built With
 

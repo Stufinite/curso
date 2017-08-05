@@ -88,7 +88,7 @@ Usage of API (pattern written below is URL pattern)：
   ```
   import curso.urls
   urlpatterns += [
-      url(r'^search/', include(curso.urls))
+      url(r'^curso/', include(curso.urls))
   ]
   ```
 
@@ -96,7 +96,7 @@ Usage of API (pattern written below is URL pattern)：
 
 ### Break down into end to end tests
 
-目前還沒寫測試...
+`python manage.py test curso`
 
 ## Built With
 

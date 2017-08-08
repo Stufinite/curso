@@ -9,7 +9,7 @@ class CursoTestCase(TestCase):
 
 	def test_clist(self):
 		response = self.client.get(reverse('curso:search')+"?keyword=文化+臺灣&school=NUTC")
-		self.assertEqual(response.json(), ["D16432"])
+		self.assertEqual(type(response.json()), list)
 
 	def test_incWeight(self):
 		response = self.client.get(reverse('curso:incWeight')+'?keyword=發心&fullTitle=發展心理學')

@@ -30,7 +30,7 @@ Usage of API (pattern written below is URL pattern)：
 取得該校課程的課程代碼
 
   - 範例 (Example)：
-    - `http://127.0.0.1:8000/curso/get/search/?keyword=台灣&school=NUTC`：
+    - `http://127.0.0.1:8000/curso/get/search/?keyword=台灣&school=NSYSU`：
 
         ```
         ["D19080", "D16468"]
@@ -38,7 +38,7 @@ Usage of API (pattern written below is URL pattern)：
 
 2. 複數關鍵字查詢：
 
-  - 範例 (Example)：`http://127.0.0.1:8000/curso/get/search/?keyword=文化+臺灣&school=NUTC`
+  - 範例 (Example)：`http://127.0.0.1:8000/curso/get/search/?keyword=文化+臺灣&school=NSYSU`
 
     ```
     ["D16432"]

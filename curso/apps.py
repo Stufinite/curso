@@ -33,7 +33,7 @@ class SearchOb(object):
 	def KEMSearch(self, kw):
 		from functools import reduce 
 
-		cursor = self.SrchCollect.find({'key':kw}, {'value':1, '_id':False}).limit(1)
+		cursor = self.SrchCollect.find({'key':kw, 'school':self.school}, {'value':1, '_id':False}).limit(1)
 		if cursor.count() > 0:
 			# Key Exist
 			return list(cursor)[0]['value']
@@ -42,13 +42,12 @@ class SearchOb(object):
 				kcm = json.loads(requests.get('http://140.120.13.244:10000/kcm/?keyword={}&lang=cht&num=200'.format(urllib.parse.quote(kw))).text)
 				kem = json.loads(requests.get('http://140.120.13.244:10000/kem/?keyword={}&lang=cht&num=200'.format(urllib.parse.quote(kw))).text)
 
-
 				for i in reduce(lambda x, y: x + y, zip(kcm, kem)):
-					cursor = self.SrchCollect.find({'key':i[0]}, {self.school:1, '_id':False}).limit(1)
+					cursor = self.SrchCollect.find({'key':i[0], 'school':self.school}, {'value':1, '_id':False}).limit(1)
 					if cursor.count() > 0:
 						# Key Exist
-						value = list(cursor)[0][self.school]
-						self.SrchCollect.update({'key':kw}, {'$set': {self.school:value}}, upsert=True)
+						value = list(cursor)[0]['value']
+						self.SrchCollect.update({'key':kw}, {'$set': {'school':self.school, 'value':value}}, upsert=True)
 						return value
 
 				return []

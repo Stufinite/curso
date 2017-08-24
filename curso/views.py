@@ -18,3 +18,14 @@ def incWeight(request):
 	sob = SearchOb(keyword)
 	sob.incWeight(fullTitle)
 	return JsonResponse({"receive Weight success":1}, safe=False)
+
+@queryString_required(['keyword', 'school'])
+def demo(request):
+	from timetable.models import Course
+	keyword = request.GET['keyword']
+	school = request.GET['school']
+	sob = SearchOb(keyword, school)
+	codeList = sob.getResult()
+
+	result = [(Course.objects.filter(code=i)[0].title, i) for i in codeList]
+	return JsonResponse(result, safe=False)

@@ -4,4 +4,5 @@ from curso import views
 urlpatterns = [
 	url(r'^get/search/$', views.search, name='search'),
 	url(r'^post/incWeight/$', views.incWeight, name='incWeight'),
+	url(r'^get/demo/$', views.demo, name='demo'),
 ]

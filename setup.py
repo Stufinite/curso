@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name = 'curso',
     packages = ['curso'],
-    version = '2.1',
+    version = '2.2',
     description = 'A search Engine that use KCM & KEM api invented by UDIC at NCHU.',
     author = 'davidtnfsh',
     author_email = 'davidtnfsh@gmail.com',

@@ -20,6 +20,9 @@ class SearchOb(object):
         if cursor.count() > 0:
             pass
         else:
-            keyword = self.cursoNgram.find(keyword)     
-            cursor = self.SrchCollect.find({'key':keyword}, {school:1, '_id':False}).limit(1)
+            keyword = self.cursoNgram.find(keyword)  
+            if keyword:   
+                cursor = self.SrchCollect.find({'key':keyword}, {school:1, '_id':False}).limit(1)
+            else:
+                return []
         return cursor[0][school]

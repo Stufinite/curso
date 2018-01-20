@@ -2,5 +2,5 @@
 from django.conf.urls import url
 from curso import views
 urlpatterns = [
-	url(r'^get/search/$', views.search, name='search'),
+	url(r'^$', views.search, name='search'),
 ]

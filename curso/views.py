@@ -8,5 +8,4 @@ sob = SearchOb()
 def search(request):
 	keyword = request.GET['keyword']
 	school = request.GET['school']
-				
-	return JsonResponse(sob.search(), safe=False)
+	return JsonResponse(sob.search(keyword, school), safe=False)

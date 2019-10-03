@@ -17,7 +17,7 @@ setup(
         'jieba==0.38',
         'pymongo==3.4.0',
         'PyPrind==2.9.9',
-        'requests==2.12.3',
+        'requests==2.20.0',
         'simplejson==3.10.0',
         'ngram',
     ],
